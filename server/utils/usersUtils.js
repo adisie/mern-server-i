@@ -6,7 +6,6 @@ const MAX_AGE = 60 * 30
 // error handler
 const errorHandler = err => {
     const errors = {username: '',email: '',password: ''}
-    console.log(err)
     // errors for login
     if(err.message === 'username required'){
         errors.username = 'username required'
