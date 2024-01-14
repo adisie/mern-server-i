@@ -83,17 +83,36 @@ const login = async (req,res) => {
 
 // logout
 const logout = (req,res) => {
-    res.status(200).json('LOGOUT')
+    try{
+        res.cookie('token','',{maxAge: 1})
+        res.status(200).json({
+            message: 'logged out'
+        })
+    }catch(err){
+        res.status(400).json({
+            error: 'logout error'
+        })
+    }
 }
 
 // check-auth
 const checkAuth = (req,res) => {
-    res.status(200).json('CHECK-AUTH')
+    res.status(200).json({
+        messahe: 'authorized',
+        user: req.user,
+    })
 }
 
 // get all users
-const getAllUsers = (req,res) => {
-    res.status(200).json('GET-ALL-USERS')
+const getAllUsers = async (req,res) => {
+    try{
+        const users = await User.find().select({_id: 1,username: 1,email: 1})
+        res.status(200).json({users})
+    }catch(err){
+        res.status(400).json({
+            error: 'get all users error'
+        })
+    }
 }
 
 module.exports = {

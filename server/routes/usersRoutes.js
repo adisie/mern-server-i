@@ -9,6 +9,12 @@ const {
     getAllUsers,
 } = require('../controllers/usersControllers')
 
+// middlewares
+// private routes
+const {
+    privateRoute,
+} = require('../middlewares/privateRoutes')
+
 const router = Router()
 
 // signup
@@ -21,7 +27,7 @@ router.post('/login',login)
 router.get('/logout',logout)
 
 // check-auth
-router.get('/check-auth',checkAuth)
+router.get('/check-auth',privateRoute,checkAuth)
 
 // get all users
 router.get('/get-all-users',getAllUsers)
