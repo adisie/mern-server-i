@@ -46,4 +46,6 @@ io.on('connection',socket=>{
 // routes
 // users routes
 app.use('/api/users',require('./routes/usersRoutes'))
+app.use('/api/profiles',require('./routes/userProfilesRoutes'))
+app.use('/public',express.static('public'))
 

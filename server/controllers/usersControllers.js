@@ -3,6 +3,8 @@ const bcryptjs = require('bcryptjs')
 // models
 // user model
 const User = require('../models/usersModel')
+// profiles model
+const Profile = require('../models/userProfilesModel')
 
 // utils
 const {
@@ -60,6 +62,13 @@ const login = async (req,res) => {
         if(!isPassMatch){
             throw new Error('incorrect password')
         }
+        const profiles = await Profile.find({userId: user._id}).sort({createdAt: -1}).select({
+            _id: 1,
+            userId: 1,
+            profilePath: 1,
+            createdAt: 1
+        })
+
         // generate token
         const token = generateToken(user._id)
         // set cookie
@@ -73,7 +82,8 @@ const login = async (req,res) => {
             user: {
                 _id: user._id,
                 username: user.username,
-            }
+            },
+            profiles,
         })
     }catch(err){
         const errors = errorHandler(err)
