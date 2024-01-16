@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs')
 // models
 // user model
 const User = require('../models/usersModel')
+
 // profiles model
 const Profile = require('../models/userProfilesModel')
 
@@ -125,10 +126,40 @@ const getAllUsers = async (req,res) => {
     }
 }
 
+// get users and profiles
+const getUsersProfiles = async (req,res) => {
+    try{
+        const usersProfiles = await User.aggregate([
+            {
+                $lookup: {
+                    from: 'profiles',
+                    localField: '_id',
+                    foreignField: 'userId',
+                    as: 'profiles'
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    profiles: {
+                        profilePath: 1,
+                    }
+                }
+            }
+        ])
+        res.status(200).json({usersProfiles})
+    }catch(err){
+        res.status(400).json({
+            error: 'get users and profiles error'
+        })
+    }
+}
+
 module.exports = {
     signup,
     login,
     logout,
     checkAuth,
     getAllUsers,
+    getUsersProfiles,
 }
